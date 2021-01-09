@@ -33,15 +33,19 @@ func remove_diagonal(direction):
 
 func move_to(target_position):
 	set_process(false)
-	
 	$Pivot/Sprite.play()
+	
+	#beware: unfinished spaghetti ahead -avi
+	
 	# Move the node to the target cell instantly,
 	# and animate the sprite moving from the start to the target cell
 	var move_direction = (target_position - position).normalized()
+	#$Tween.interpolate_property(self, "position", move_direction * 16, target_position, movespeed, Tween.TRANS_LINEAR, Tween.EASE_IN)
 	$Tween.interpolate_property($Pivot, "position", - move_direction * 16, Vector2(), movespeed, Tween.TRANS_LINEAR, Tween.EASE_IN)
-	$Tween.start()
 	position = target_position
 	
+	$Tween.start()
+
 	# Stop the function execution until the animation finished
 	yield($Tween, "tween_completed")
 	$Pivot/Sprite.stop()

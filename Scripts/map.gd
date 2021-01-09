@@ -19,9 +19,9 @@ func request_move(thing, direction):
 	match cell_target_type:
 		EMPTY:
 			return update_thing_position(thing, cell_start, cell_target)
-		ACTOR:
-			var thing_name = get_cell_thing(cell_target).name
-			print("Cell %s contains %s" % [cell_target, thing_name])
+#		ACTOR:
+#			var thing_name = get_cell_thing(cell_target).name
+#			print("Cell %s contains %s" % [cell_target, thing_name])
 
 func update_thing_position(thing, cell_start, cell_target):
 	set_cellv(cell_target, thing.type)
