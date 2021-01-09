@@ -1,6 +1,7 @@
 extends "thing.gd"
 
 onready var Grid = get_parent()
+export var movespeed = 0.3
 
 func _ready():
 	update_look_direction(Vector2(0, 1))
@@ -32,17 +33,27 @@ func remove_diagonal(direction):
 
 func move_to(target_position):
 	set_process(false)
-
+	
+	$Pivot/Sprite.play()
 	# Move the node to the target cell instantly,
 	# and animate the sprite moving from the start to the target cell
 	var move_direction = (target_position - position).normalized()
-	$Tween.interpolate_property($Pivot, "position", - move_direction * 16, Vector2(), 0.25, Tween.TRANS_LINEAR, Tween.EASE_IN)
-	position = target_position
+	$Tween.interpolate_property($Pivot, "position", - move_direction * 16, Vector2(), movespeed, Tween.TRANS_LINEAR, Tween.EASE_IN)
 	$Tween.start()
+	position = target_position
 	
 	# Stop the function execution until the animation finished
 	yield($Tween, "tween_completed")
+	$Pivot/Sprite.stop()
 	set_process(true)
 	
 func update_look_direction(direction):
-	$Pivot/Sprite.rotation = direction.angle()
+	# -x left -y up
+	if (direction.x<0):
+		$Pivot/Sprite.animation = "WalkL"
+	elif (direction.x>0):
+		$Pivot/Sprite.animation = "WalkR"
+	elif (direction.y<0):
+		$Pivot/Sprite.animation = "WalkU"
+	elif (direction.y>0):
+		$Pivot/Sprite.animation = "WalkD"

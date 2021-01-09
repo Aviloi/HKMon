@@ -39,7 +39,7 @@ _global_script_class_icons={
 [application]
 
 config/name="HKMon"
-run/main_scene="res://Scenes/Game.tscn"
+run/main_scene="res://Scenes/Main.tscn"
 boot_splash/fullsize=false
 boot_splash/use_filter=false
 config/icon="res://Images/icon.png"
