@@ -2,13 +2,22 @@ extends "thing.gd"
 
 onready var Grid = get_parent()
 export var movespeed = 0.3
+signal bitch
+
+# saves the direction the player's facing so it can be used for the interaction code
+var current_direction = Vector2()
 
 func _ready():
 	# when the player is called, make it look down
 	update_look_direction(Vector2(0, 1))
+	fade_black(false)
 
 # warning-ignore:unused_argument
 func _process(delta):
+	# checks if the player is pressing the interaction button
+	interaction()
+	
+	#checks if the player is pressing any of the movement buttons
 	var input_direction = get_input_direction()
 	
 	# if the input is empty, don't run the rest of the code
@@ -20,11 +29,15 @@ func _process(delta):
 	update_look_direction(input_direction)
 	
 	# calls the tilemap to see if it can to the spot
-	var target_position = Grid.request_move(self, input_direction)
+	var target_position = Grid.request_tile(self, input_direction,true)
 	
 	# if it can, move it there, if not do nothing
 	if target_position:
 		move_to(target_position)
+
+func interaction():
+	if Input.is_action_just_pressed("ui_accept"):
+		Grid.request_tile(self, current_direction, false)
 
 func get_input_direction():
 	# returns a vector 2 depending on what keys are pressed
@@ -60,11 +73,23 @@ func move_to(target_position):
 	# Stop the walking animation and continue listening for inputs
 	$Sprite.stop()
 	set_process(true)
+
+func fade_black(out):
+	set_process(false)
+	if(out):
+		$Tween.interpolate_property($UI/ColorRect,"color:a",0,1,movespeed*2)
+	else:
+		$Tween.interpolate_property($UI/ColorRect,"color:a",1,0,movespeed*2)
 	
+	$Tween.start()
+	yield($Tween, "tween_completed")
+	emit_signal("bitch")
+	set_process(true)
+
 func update_look_direction(direction):
 	# -x left -y up
 	# checks to see what the direction is and changes to the needed animation
-	
+	current_direction = direction
 	if (direction.x<0):
 		$Sprite.animation = "WalkL"
 	elif (direction.x>0):

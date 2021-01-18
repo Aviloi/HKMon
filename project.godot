@@ -42,6 +42,7 @@ config/name="HKMon"
 run/main_scene="res://Scenes/Main.tscn"
 boot_splash/fullsize=false
 boot_splash/use_filter=false
+boot_splash/bg_color=Color( 0, 0, 0, 1 )
 config/icon="res://Images/icon.png"
 
 [autoload]
@@ -135,3 +136,7 @@ ui_end={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777230,"unicode":0,"echo":false,"script":null)
  ]
 }
+
+[rendering]
+
+environment/default_clear_color=Color( 0, 0, 0, 1 )
